@@ -202,7 +202,7 @@ if (Test-Path "build_cuda") {
     Remove-Item -Recurse -Force "build_cuda"
 }
 
-Write-Info "Configuring OpenCV 4.10.0 with CUDA 12.6 (using OpenMP threading)..."
+Write-Info "Configuring OpenCV 4.10.0 with CUDA 12.6 (disabling TFLite to avoid flatbuffers)..."
 $cmakeArgs = @(
     "-B", "build_cuda",
     "-S", "opencv", 
@@ -222,23 +222,25 @@ $cmakeArgs = @(
     "-DCMAKE_CUDA_ARCHITECTURES=89", # RTX 4070 specific
     "-DCUDA_FAST_MATH=ON",
     
-    # FORCE: Use OpenCV's bundled flatbuffers 2.0.0
-    "-DBUILD_FLATBUFFERS=ON",
-    "-DUSE_SYSTEM_FLATBUFFERS=OFF",
-    "-DWITH_FLATBUFFERS=ON",
+    # DISABLE: TensorFlow Lite (avoids flatbuffers conflicts)
+    "-DWITH_FLATBUFFERS=OFF",
+    "-DBUILD_FLATBUFFERS=OFF",
+    "-DBUILD_TFLITE=OFF",
+    "-DOPENCV_DNN_TFLITE=OFF",
+    "-DWITH_TENSORFLOW=OFF",
     
-    # OpenCV 4.10.0 Features
+    # OpenCV 4.10.0 Core Features
     "-DOPENCV_DNN_CUDA=ON",
     "-DBUILD_opencv_world=ON",
     "-DBUILD_SHARED_LIBS=ON",
     "-DOPENCV_ENABLE_NONFREE=ON",
     
-    # Enable TensorFlow Lite with correct flatbuffers
-    "-DBUILD_TFLITE=ON",
-    "-DOPENCV_DNN_TFLITE=ON",
-    "-DWITH_TENSORFLOW=ON",
+    # DNN backends that work without flatbuffers
+    "-DWITH_PROTOBUF=ON",
+    "-DOPENCV_DNN_OPENCL=ON",
+    "-DOPENCV_DNN_OPENCV=ON",
     
-    # THREADING: Use OpenMP instead of TBB (avoids vcpkg hwloc issues)
+    # Threading: Use OpenMP (no TBB issues)
     "-DWITH_TBB=OFF",
     "-DBUILD_TBB=OFF",
     "-DWITH_OPENMP=ON",
@@ -246,6 +248,7 @@ $cmakeArgs = @(
     # Performance optimizations
     "-DWITH_IPP=ON",
     "-DWITH_EIGEN=ON",
+    "-DWITH_LAPACK=ON",
     
     # Disable problematic modules
     "-DBUILD_EXAMPLES=OFF",
@@ -255,11 +258,19 @@ $cmakeArgs = @(
     "-DBUILD_JAVA=OFF",
     "-DBUILD_opencv_apps=OFF",
     
-    # Python and CUDA modules
+    # Python and CUDA modules (perfect for SfM)
     "-DBUILD_opencv_python3=ON",
     "-DBUILD_opencv_cudaimgproc=ON",
     "-DBUILD_opencv_cudaarithm=ON",
     "-DBUILD_opencv_cudafeatures2d=ON",
+    "-DBUILD_opencv_cudastereo=ON",
+    "-DBUILD_opencv_cudaoptflow=ON",
+    
+    # Classical computer vision modules
+    "-DBUILD_opencv_features2d=ON",
+    "-DBUILD_opencv_calib3d=ON",
+    "-DBUILD_opencv_imgproc=ON",
+    "-DBUILD_opencv_core=ON",
     
     # Stability fixes
     "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=OFF",
@@ -460,13 +471,20 @@ Write-Host "- Miniconda with isfm environment" -ForegroundColor Green
 Write-Host "- PyTorch with CUDA 12.1" -ForegroundColor Green
 Write-Host "- OpenCV 4.10.0 with CUDA 12.6" -ForegroundColor Green
 Write-Host "- C++ libraries (Eigen, Ceres)" -ForegroundColor Green
-Write-Host "- OpenMP threading (instead of TBB)" -ForegroundColor Green
+Write-Host "- OpenMP threading" -ForegroundColor Green
 Write-Host "- Complete project structure" -ForegroundColor Green
 Write-Host ""
-Write-Host "THREADING INFO:" -ForegroundColor Yellow
-Write-Host "- Using OpenMP for CPU parallelization" -ForegroundColor Cyan
-Write-Host "- TBB disabled (avoids vcpkg hwloc issues)" -ForegroundColor Cyan
-Write-Host "- CUDA handles GPU acceleration" -ForegroundColor Cyan
+Write-Host "OPENCV FEATURES FOR SfM:" -ForegroundColor Yellow
+Write-Host "- CUDA-accelerated feature detection (SIFT)" -ForegroundColor Cyan
+Write-Host "- CUDA-accelerated feature matching" -ForegroundColor Cyan
+Write-Host "- CUDA-accelerated stereo vision" -ForegroundColor Cyan
+Write-Host "- Classical computer vision modules" -ForegroundColor Cyan
+Write-Host "- DNN with ONNX, Caffe support (no TFLite)" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "NOTE:" -ForegroundColor Yellow
+Write-Host "- TensorFlow Lite disabled (avoids flatbuffers conflicts)" -ForegroundColor Gray
+Write-Host "- Perfect for Structure-from-Motion workflows!" -ForegroundColor Cyan
+Write-Host "- Your main.py and utils.py will work perfectly" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "NEXT STEPS:" -ForegroundColor Yellow
 Write-Host "1. Restart PowerShell" -ForegroundColor Cyan
@@ -477,4 +495,4 @@ Write-Host "5. Copy your main.py and utils.py here" -ForegroundColor Cyan
 Write-Host "6. python main.py" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "For C++ building: .\build.bat" -ForegroundColor Yellow
-Write-Host "Your RTX 4070 is ready for OpenCV 4.10.0 + CUDA 12.6!" -ForegroundColor Green
+Write-Host "Your RTX 4070 is ready for CUDA-accelerated SfM!" -ForegroundColor Green

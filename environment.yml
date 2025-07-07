@@ -1,0 +1,20 @@
+﻿name: isfm
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy>=1.21.0
+  - scipy
+  - matplotlib
+  - pytorch
+  - torchvision
+  - pytorch-cuda=12.1
+  - open3d
+  - pytest
+  - pybind11
+  - pip
+  - pip:
+    - onnxruntime-gpu
+

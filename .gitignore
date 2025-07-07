@@ -1,3 +1,6 @@
 data/
+build/
+_skbuild/
+vcpkg_installed/
 *.pdf
 *.exe

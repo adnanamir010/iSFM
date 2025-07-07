@@ -1,0 +1,43 @@
+# [build-system]
+# requires = ["setuptools", "wheel", "scikit-build"]
+# build-backend = "setuptools.build_meta"
+
+# [project]
+# name = "hybrid_sfm"
+# version = "0.1.0"
+# description = "Robust Incremental Structure-from-Motion with Hybrid Features"
+# authors = [{name = "Adnan Amir", email = "amir.ad@northeastern.edu"}]
+# license = "MIT"
+# classifiers = [
+#     "Development Status :: 3 - Alpha",
+#     "Intended Audience :: Developers",
+#     "Intended Audience :: Science/Research",
+#     # "License :: OSI Approved :: MIT License", #<-- REMOVE THIS LINE
+#     "Programming Language :: Python :: 3",
+#     "Programming Language :: C++",
+#     "Topic :: Scientific/Engineering :: Image Recognition"
+# ]
+# dynamic = ["requires-python"]
+
+# [tool.setuptools.packages.find]
+# where = ["python"]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hybrid_sfm"
+version = "0.1.0"
+description = "Robust Incremental Structure-from-Motion with Hybrid Features"
+authors = [{name = "Adnan Amir", email = "amir.ad@northeastern.edu"}]
+license = "MIT"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+]
+dynamic = ["requires-python"]
+
+[tool.setuptools.packages.find]
+where = ["python"]
