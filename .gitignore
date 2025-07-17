@@ -4,3 +4,31 @@ _skbuild/
 vcpkg_installed/
 *.pdf
 *.exe
+cmake-build-*/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/c_cpp_properties.json
+
+# OS
+.DS_Store
+*.swp
+*~
+
+# Project specific
+*.o
+*.a
+compile_commands.json

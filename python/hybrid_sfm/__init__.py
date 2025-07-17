@@ -1,9 +1,8 @@
-# Import the C++ compiled module
-from . import _core
+"""Hybrid Structure-from-Motion Package"""
 
-# Expose the C++ classes to the top-level package for convenience
-Observation = _core.Observation
-Camera = _core.Camera
-Image = _core.Image
+from .hybrid_sfm import (
+    Camera, CameraModel, CameraPose, Image
+)
 
-print("Hybrid SfM package loaded successfully!")
+__version__ = "0.1.0"
+__all__ = ["Camera", "CameraModel", "CameraPose", "Image"]

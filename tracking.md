@@ -1,6 +1,7 @@
 # Hybrid Structure-from-Motion: Daily Implementation Tracker
 
 ## 🎯 Project Overview
+
 **Goal**: Build a hybrid Structure-from-Motion system that combines points, lines, and vanishing points for robust 3D reconstruction, especially in challenging indoor environments.
 
 **Based on Paper**: "Robust Incremental Structure-from-Motion with Hybrid Features" (Liu et al.)
@@ -10,13 +11,13 @@
 ---
 
 ## 🛠️ Environment Setup (COMPLETED)
-- **OS**: Windows 11
-- **GPU**: RTX 4070 (CUDA 12.6, cuDNN 8.9.7)
-- **OpenCV**: 4.10.0 with CUDA support
-- **Python**: 3.11 (Miniconda)
-- **C++**: MSVC 2022 (C++17/20)
-- **Build System**: CMake + vcpkg
-- **Key Libraries**: Eigen3, Ceres Solver, OpenCV, PyTorch, Open3D
+
+- **OS**: Ubuntu 22.04 LTS (switched from Windows)
+- **GPU**: RTX 4070 Laptop (8GB VRAM)
+- **CUDA**: 12.4
+- **OpenCV**: 4.13.0-dev with CUDA support
+- **Python**: 3.10.12 with virtual environment
+- **Compiler**: GCC/G++ 11.4.0
 
 **Environment Status**: ✅ READY
 
@@ -27,8 +28,10 @@
 ### **WEEK 1: Foundation & Basic Infrastructure**
 
 #### **Day 1: Project Structure & Build System**
+
 **Objective**: Set up complete project structure and build system
 **Deliverables**:
+
 - Complete CMakeLists.txt with all dependencies
 - vcpkg.json with package specifications
 - Python package structure with pybind11 bindings
@@ -37,6 +40,7 @@
 **LinkedIn Post**: "🚀 Starting my hybrid Structure-from-Motion project! Setting up a robust C++/Python architecture for combining points, lines, and vanishing points in 3D reconstruction. #ComputerVision #SfM #OpenCV"
 
 **Key Files to Create**:
+
 ```
 hybrid_sfm/
 ├── CMakeLists.txt
@@ -54,8 +58,10 @@ hybrid_sfm/
 ---
 
 #### **Day 2: Camera Models & Calibration**
+
 **Objective**: Implement camera intrinsic/extrinsic models
 **Deliverables**:
+
 - Pinhole camera model with distortion
 - Camera pose representation (rotation + translation)
 - COLMAP camera file parser
@@ -64,6 +70,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📷 Implemented robust camera models for my hybrid SfM system. Supporting pinhole cameras with distortion coefficients - the foundation for accurate 3D reconstruction! #CameraCalibration #3DReconstruction"
 
 **Key Implementation**:
+
 - Quaternion-based rotations
 - Camera matrix operations
 - Projection/unprojection functions
@@ -74,8 +81,10 @@ hybrid_sfm/
 ---
 
 #### **Day 3: Image Data Pipeline**
+
 **Objective**: Create image loading and preprocessing pipeline
 **Deliverables**:
+
 - Multi-format image loader (supports common formats)
 - Image pyramid generation for multi-scale processing
 - Metadata extraction and management
@@ -84,6 +93,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🖼️ Built a robust image processing pipeline for hybrid SfM! Multi-scale image pyramids and efficient memory management - ready for feature extraction. #ImageProcessing #OpenCV"
 
 **Key Features**:
+
 - CUDA-accelerated image operations
 - Lazy loading for large datasets
 - Image undistortion pipeline
@@ -94,8 +104,10 @@ hybrid_sfm/
 ---
 
 #### **Day 4: Point Feature Detection (SIFT)**
+
 **Objective**: Implement CUDA-accelerated SIFT detection
 **Deliverables**:
+
 - SIFT feature detector wrapper
 - GPU memory management for features
 - Feature quality filtering
@@ -106,6 +118,7 @@ hybrid_sfm/
 **Performance Target**: >10x speedup over CPU SIFT
 
 **Key Implementation**:
+
 - OpenCV CUDA SIFT integration
 - Adaptive feature count per image
 - Octave-based processing
@@ -116,8 +129,10 @@ hybrid_sfm/
 ---
 
 #### **Day 5: Point Feature Matching**
+
 **Objective**: Implement robust feature matching with CUDA
 **Deliverables**:
+
 - FLANN-based feature matching
 - Lowe's ratio test implementation
 - Cross-checking for robust matches
@@ -126,6 +141,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🔗 Robust feature matching implemented! Lowe's ratio test + cross-checking ensures high-quality matches. Watch those feature correspondences light up! #FeatureMatching #ComputerVision"
 
 **Key Features**:
+
 - GPU-accelerated matching
 - Geometric verification
 - Match filtering and ranking
@@ -136,8 +152,10 @@ hybrid_sfm/
 ---
 
 #### **Day 6: Geometric Verification (Essential Matrix)**
+
 **Objective**: Implement RANSAC-based geometric verification
 **Deliverables**:
+
 - 5-point algorithm for essential matrix
 - RANSAC implementation with adaptive thresholds
 - Pose recovery from essential matrix
@@ -146,6 +164,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📐 Geometric verification complete! RANSAC + 5-point algorithm filters out bad matches and recovers camera poses. The math behind SfM is beautiful! #RANSAC #EssentialMatrix"
 
 **Key Implementation**:
+
 - OpenCV's findEssentialMat with CUDA
 - Chirality check for pose disambiguation
 - Confidence-based termination
@@ -156,8 +175,10 @@ hybrid_sfm/
 ---
 
 #### **Day 7: Basic SfM Pipeline Integration**
+
 **Objective**: Integrate components into working point-based SfM
 **Deliverables**:
+
 - End-to-end point-based reconstruction
 - Two-view reconstruction demo
 - Basic bundle adjustment integration
@@ -173,8 +194,10 @@ hybrid_sfm/
 ### **WEEK 2: Line Feature Integration**
 
 #### **Day 8: Line Detection (DeepLSD)**
+
 **Objective**: Integrate DeepLSD for robust line detection
 **Deliverables**:
+
 - DeepLSD model integration via ONNX
 - Line segment extraction and filtering
 - Multi-scale line detection
@@ -183,6 +206,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🔍 Deep learning meets traditional computer vision! Integrated DeepLSD for robust line detection. Even in challenging lighting, we're finding those structural lines! #DeepLearning #LineDetection"
 
 **Key Features**:
+
 - ONNX Runtime integration
 - GPU inference acceleration
 - Line segment merging
@@ -193,8 +217,10 @@ hybrid_sfm/
 ---
 
 #### **Day 9: Line Matching (GlueStick)**
+
 **Objective**: Implement GlueStick for line matching
 **Deliverables**:
+
 - GlueStick model integration
 - Line descriptor computation
 - Robust line matching pipeline
@@ -203,6 +229,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🧲 GlueStick line matching is incredible! Matching line segments across views with neural network precision. The future of feature matching is here! #NeuralMatching #LineMatching"
 
 **Key Implementation**:
+
 - Joint point-line matching
 - Geometric consistency checks
 - Match confidence scoring
@@ -213,8 +240,10 @@ hybrid_sfm/
 ---
 
 #### **Day 10: Vanishing Point Detection**
+
 **Objective**: Implement vanishing point detection using JLinkage
 **Deliverables**:
+
 - JLinkage clustering algorithm
 - Line grouping by vanishing points
 - Manhattan world assumptions
@@ -223,6 +252,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📍 Vanishing points detected! JLinkage algorithm groups parallel lines and finds those crucial vanishing points. Manhattan world structure emerging! #VanishingPoints #StructuralCV"
 
 **Key Features**:
+
 - Multi-VP detection (typically 3 for Manhattan)
 - Outlier line rejection
 - Confidence-based VP selection
@@ -233,8 +263,10 @@ hybrid_sfm/
 ---
 
 #### **Day 11: Hybrid Feature Matching**
+
 **Objective**: Create unified point-line-VP matching framework
 **Deliverables**:
+
 - Cross-modal feature verification
 - Geometric consistency between feature types
 - Unified match data structures
@@ -243,6 +275,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🔄 Hybrid feature matching achieved! Points, lines, and vanishing points working together for robust correspondences. The synergy is remarkable! #HybridFeatures #MultiModal"
 
 **Key Implementation**:
+
 - Point-line spatial relationships
 - Line-VP consistency checks
 - Multi-feature RANSAC
@@ -253,8 +286,10 @@ hybrid_sfm/
 ---
 
 #### **Day 12: Line Triangulation**
+
 **Objective**: Implement incremental line triangulation
 **Deliverables**:
+
 - 3D line representation (Plücker coordinates)
 - Two-view line triangulation
 - Multi-view line optimization
@@ -263,6 +298,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📏 3D line triangulation working! Converting 2D line segments into 3D space using Plücker coordinates. The geometry is getting richer! #LineTriangulation #PluckerCoordinates"
 
 **Key Features**:
+
 - Robust line fitting in 3D
 - Endpoint optimization
 - Uncertainty propagation
@@ -273,8 +309,10 @@ hybrid_sfm/
 ---
 
 #### **Day 13: Vanishing Point Triangulation**
+
 **Objective**: Implement VP triangulation and direction recovery
 **Deliverables**:
+
 - Single-view VP to 3D direction
 - Multi-view VP consistency
 - Manhattan frame recovery
@@ -283,6 +321,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🧭 3D vanishing point triangulation complete! Recovering the 3D directions of parallel line families. Manhattan world constraints are powerful! #VanishingPoints #ManhattanWorld"
 
 **Key Implementation**:
+
 - Spherical representation of directions
 - Cross-view VP association
 - Orthogonal constraint enforcement
@@ -293,8 +332,10 @@ hybrid_sfm/
 ---
 
 #### **Day 14: Hybrid Geometric Verification**
+
 **Objective**: Extend RANSAC for multi-feature geometric verification
 **Deliverables**:
+
 - Multi-solver RANSAC framework
 - Point-line PnP solvers
 - VP-constrained pose estimation
@@ -303,6 +344,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🎯 Hybrid RANSAC is game-changing! Using points, lines, AND vanishing points for camera pose estimation. Robust estimation just got way more robust! #RANSAC #HybridGeometry"
 
 **Key Features**:
+
 - P3P, P2P1L, P1P2L solvers
 - VP-gravity alignment
 - Adaptive solver selection
@@ -315,8 +357,10 @@ hybrid_sfm/
 ### **WEEK 3: Bundle Adjustment & Optimization**
 
 #### **Day 15: Cost Function Design**
+
 **Objective**: Implement cost functions for hybrid bundle adjustment
 **Deliverables**:
+
 - Point reprojection error
 - Line-to-line distance metrics
 - VP direction consistency
@@ -325,6 +369,7 @@ hybrid_sfm/
 **LinkedIn Post**: "⚡ Designing cost functions for hybrid bundle adjustment! Balancing point accuracy, line distances, and VP consistency. Mathematical beauty meets practical optimization! #BundleAdjustment #Optimization"
 
 **Key Implementation**:
+
 - Ceres Solver integration
 - Automatic differentiation
 - Robust loss functions
@@ -335,8 +380,10 @@ hybrid_sfm/
 ---
 
 #### **Day 16: Uncertainty Propagation**
+
 **Objective**: Implement analytical uncertainty propagation for lines
 **Deliverables**:
+
 - Jacobian computation for line residuals
 - Covariance propagation
 - Uncertainty visualization
@@ -345,6 +392,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📊 Breakthrough in uncertainty estimation! First analytical method for propagating uncertainties in 3D line optimization. Now we know which features to trust! #UncertaintyQuantification #Innovation"
 
 **Key Features**:
+
 - Second-order sensitivity analysis
 - Line-specific uncertainty models
 - Feature reliability scoring
@@ -355,8 +403,10 @@ hybrid_sfm/
 ---
 
 #### **Day 17: Two-Step Bundle Adjustment**
+
 **Objective**: Implement reliable/unreliable track separation
 **Deliverables**:
+
 - Track reliability classification
 - Two-phase optimization
 - Inactive support caching
@@ -365,6 +415,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🎯 Two-step bundle adjustment implemented! Separating reliable from unreliable tracks prevents bad features from corrupting the entire reconstruction. Smart optimization! #BundleAdjustment #TrackManagement"
 
 **Key Implementation**:
+
 - Uncertainty-based track classification
 - Fixed-pose refinement for unreliable tracks
 - Dynamic track promotion/demotion
@@ -375,8 +426,10 @@ hybrid_sfm/
 ---
 
 #### **Day 18: Local Bundle Adjustment**
+
 **Objective**: Implement sliding-window local BA
 **Deliverables**:
+
 - Keyframe selection strategy
 - Local BA window management
 - Marginalization of old keyframes
@@ -385,6 +438,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🪟 Sliding-window bundle adjustment is working! Local optimization keeps the system efficient while maintaining global consistency. Scalable SfM architecture! #LocalBA #Scalability"
 
 **Key Features**:
+
 - Uncertainty-based keyframe selection
 - Efficient sparse matrix operations
 - Incremental Cholesky updates
@@ -395,8 +449,10 @@ hybrid_sfm/
 ---
 
 #### **Day 19: Global Bundle Adjustment**
+
 **Objective**: Implement full global optimization
 **Deliverables**:
+
 - Full problem formulation
 - Sparse matrix optimization
 - Convergence monitoring
@@ -405,6 +461,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🌍 Global bundle adjustment complete! Optimizing the entire reconstruction simultaneously - thousands of parameters converging beautifully. The power of sparse optimization! #GlobalBA #Optimization"
 
 **Key Implementation**:
+
 - Ceres Solver configuration
 - Parallel Jacobian computation
 - Convergence criteria
@@ -415,8 +472,10 @@ hybrid_sfm/
 ---
 
 #### **Day 20: Structural Constraints**
+
 **Objective**: Implement point-line and line-VP associations
 **Deliverables**:
+
 - Point-on-line constraints
 - Line-VP parallelism constraints
 - Manhattan world enforcement
@@ -425,6 +484,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🏗️ Structural constraints are revolutionary! Points lying on lines, parallel line families, orthogonal VPs - injecting geometric knowledge into optimization! #StructuralConstraints #GeometricCV"
 
 **Key Features**:
+
 - Constraint residual functions
 - Adaptive constraint weighting
 - Constraint violation detection
@@ -435,8 +495,10 @@ hybrid_sfm/
 ---
 
 #### **Day 21: Optimization Integration Test**
+
 **Objective**: Integrate all optimization components
 **Deliverables**:
+
 - End-to-end optimization pipeline
 - Performance benchmarking
 - Quality metrics
@@ -452,8 +514,10 @@ hybrid_sfm/
 ### **WEEK 4: Incremental Mapping System**
 
 #### **Day 22: Track Management System**
+
 **Objective**: Implement hybrid track management
 **Deliverables**:
+
 - Point/line/VP track data structures
 - Track creation and continuation
 - Track merging and splitting
@@ -462,6 +526,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📊 Advanced track management system built! Handling thousands of point, line, and VP tracks across image sequences. Data structures matter in computer vision! #TrackManagement #DataStructures"
 
 **Key Features**:
+
 - Efficient track lookup
 - Multi-feature track relationships
 - Track quality assessment
@@ -472,8 +537,10 @@ hybrid_sfm/
 ---
 
 #### **Day 23: Incremental Triangulation**
+
 **Objective**: Implement incremental feature triangulation
 **Deliverables**:
+
 - On-demand triangulation
 - Multi-view triangulation updates
 - Triangulation quality assessment
@@ -482,6 +549,7 @@ hybrid_sfm/
 **LinkedIn Post**: "⚡ Incremental triangulation working! Adding new 3D features as new images arrive. Building the 3D world one frame at a time! #IncrementalSfM #Triangulation"
 
 **Key Implementation**:
+
 - Triangulation scheduling
 - Quality-based triangulation decisions
 - Robust triangulation algorithms
@@ -492,8 +560,10 @@ hybrid_sfm/
 ---
 
 #### **Day 24: Keyframe Selection**
+
 **Objective**: Implement intelligent keyframe selection
 **Deliverables**:
+
 - Uncertainty-based keyframe scoring
 - Coverage-based selection
 - Redundancy detection
@@ -502,6 +572,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🎯 Smart keyframe selection implemented! Using uncertainty and coverage metrics to choose the most informative frames. Quality over quantity! #KeyframeSelection #SmartSampling"
 
 **Key Features**:
+
 - Multi-criteria keyframe scoring
 - Temporal spacing constraints
 - Feature coverage analysis
@@ -512,8 +583,10 @@ hybrid_sfm/
 ---
 
 #### **Day 25: Map Refinement Pipeline**
+
 **Objective**: Integrate local and global refinement
 **Deliverables**:
+
 - Adaptive refinement scheduling
 - Refinement quality monitoring
 - Performance optimization
@@ -522,6 +595,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🔧 Map refinement pipeline complete! Automatically triggering local and global optimizations based on reconstruction quality. Self-maintaining 3D maps! #MapRefinement #AutoOptimization"
 
 **Key Implementation**:
+
 - Refinement trigger conditions
 - Multi-threaded refinement
 - Quality improvement tracking
@@ -532,8 +606,10 @@ hybrid_sfm/
 ---
 
 #### **Day 26: Incremental Mapper Integration**
+
 **Objective**: Integrate all mapping components
 **Deliverables**:
+
 - Complete incremental mapping system
 - Real-time performance optimization
 - Memory management
@@ -547,8 +623,10 @@ hybrid_sfm/
 ---
 
 #### **Day 27: Mapping System Testing**
+
 **Objective**: Comprehensive testing of mapping system
 **Deliverables**:
+
 - Benchmark dataset testing
 - Performance profiling
 - Memory usage analysis
@@ -557,6 +635,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📈 Mapping system benchmarked! Testing on ETH3D, Hypersim, and TUM datasets. The numbers are looking great - hybrid features really work! #Benchmarking #Performance"
 
 **Success Metrics**:
+
 - Process 1000+ image sequences
 - 20% improvement over point-only
 - <2GB memory usage
@@ -566,8 +645,10 @@ hybrid_sfm/
 ### **WEEK 5: Advanced Features & Integration**
 
 #### **Day 28: Camera Registration Pipeline**
+
 **Objective**: Implement robust camera registration
 **Deliverables**:
+
 - Multi-solver registration
 - Registration quality scoring
 - Failure detection and recovery
@@ -576,6 +657,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📷 Advanced camera registration complete! Multi-solver RANSAC with hybrid features makes registration incredibly robust. Bringing cameras into the 3D world! #CameraRegistration #PoseEstimation"
 
 **Key Features**:
+
 - Hybrid RANSAC framework
 - Pose verification pipeline
 - Registration confidence scoring
@@ -586,8 +668,10 @@ hybrid_sfm/
 ---
 
 #### **Day 29: Visualization & Analysis Tools**
+
 **Objective**: Create comprehensive visualization system
 **Deliverables**:
+
 - 3D reconstruction viewer
 - Feature track visualization
 - Uncertainty visualization
@@ -596,6 +680,7 @@ hybrid_sfm/
 **LinkedIn Post**: "👀 Amazing visualization tools built! 3D point clouds, line segments, vanishing points, and uncertainty maps all in one viewer. Seeing is believing! #Visualization #3DReconstruction"
 
 **Key Features**:
+
 - Interactive 3D viewer
 - Multi-feature rendering
 - Real-time updates
@@ -606,8 +691,10 @@ hybrid_sfm/
 ---
 
 #### **Day 30: Python API & High-Level Interface**
+
 **Objective**: Create user-friendly Python API
 **Deliverables**:
+
 - Clean Python interface
 - Pipeline configuration
 - Batch processing tools
@@ -616,6 +703,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🐍 User-friendly Python API complete! High-level interface makes hybrid SfM accessible to researchers and developers. Easy to use, powerful results! #PythonAPI #UserExperience"
 
 **Key Features**:
+
 - Simple pipeline configuration
 - Pythonic data structures
 - Error handling and logging
@@ -628,8 +716,10 @@ hybrid_sfm/
 ### **WEEK 6: Testing & Optimization**
 
 #### **Day 31-32: Comprehensive Testing**
+
 **Objective**: Test system on multiple datasets
 **Deliverables**:
+
 - ETH3D benchmark results
 - Hypersim evaluation
 - TUM dataset testing
@@ -638,6 +728,7 @@ hybrid_sfm/
 **LinkedIn Post**: "📊 Comprehensive evaluation complete! Our hybrid SfM system shows consistent 20-40% improvement over COLMAP on challenging indoor scenes. The research is validated! #Evaluation #Research"
 
 **Success Metrics**:
+
 - Beat COLMAP on indoor scenes
 - Match COLMAP on textured outdoor scenes
 - Demonstrate robustness improvements
@@ -645,8 +736,10 @@ hybrid_sfm/
 ---
 
 #### **Day 33-34: Performance Optimization**
+
 **Objective**: Optimize for production use
 **Deliverables**:
+
 - Multi-threading optimization
 - Memory usage reduction
 - GPU utilization improvement
@@ -655,6 +748,7 @@ hybrid_sfm/
 **LinkedIn Post**: "⚡ Performance optimization complete! Multi-threading, GPU acceleration, and memory efficiency make our hybrid SfM system production-ready. Speed meets accuracy! #Optimization #Performance"
 
 **Target Improvements**:
+
 - 2x faster processing
 - 50% less memory usage
 - Better GPU utilization
@@ -662,8 +756,10 @@ hybrid_sfm/
 ---
 
 #### **Day 35: Documentation & Release**
+
 **Objective**: Prepare for open-source release
 **Deliverables**:
+
 - Complete documentation
 - Installation guides
 - Example tutorials
@@ -672,6 +768,7 @@ hybrid_sfm/
 **LinkedIn Post**: "🎉 Hybrid Structure-from-Motion system complete! 35 days of intensive development, combining classical computer vision with modern deep learning. Open-source release coming soon! #OpenSource #Research #Achievement"
 
 **Final Deliverables**:
+
 - Complete working system
 - Comprehensive documentation
 - Benchmark results
@@ -681,13 +778,14 @@ hybrid_sfm/
 
 ## 📊 Progress Tracking
 
-### Completed Days: [ 1 / 35 ]
+### Completed Days: [ 2 / 35 ] ✅✅
 
-**Current Phase**: Foundation & Basic Infrastructure
-**Current Day**: Day 2 - Camera Models & Calibration
+**Current Phase**: Foundation & Basic Infrastructure  
+**Current Day**: Day 3 - Image Data Pipeline  
 **Next Milestone**: Basic SfM Pipeline (Day 7)
 
 ### Key Metrics to Track:
+
 - [ ] Performance vs COLMAP
 - [ ] Memory usage optimization
 - [ ] Processing speed (fps)
@@ -695,6 +793,7 @@ hybrid_sfm/
 - [ ] Robustness on challenging scenes
 
 ### LinkedIn Post Performance:
+
 - Engagement rate: Track likes, comments, shares
 - Professional connections made
 - Industry interest generated
@@ -706,28 +805,67 @@ hybrid_sfm/
 
 **When starting a new chat, share this information:**
 
-1. **Current Day**: 2
-2. **Completed Tasks**: Day 1: Project structure, dependencies, and a robust C++/Python build system are complete and verified
-3. **Current Issues**: None. The environment is stable.
-4. **Next Objective**: Implement camera intrinsic/extrinsic models and a COLMAP camera file parser.
-5. **Environment Status**: OpenCV 4.10.0 + CUDA 12.6 on Windows 11
+1. **Current Day**: 3 - Image Data Pipeline
+2. **Completed Tasks**:
+   - Day 1: Project structure with CMake, basic types, Python bindings
+   - Day 2: 10 camera models with distortion, COLMAP compatibility
+3. **Environment**: Ubuntu 22.04, OpenCV 4.13.0-dev, CUDA 12.4, RTX 4070
+4. **Project Location**: `~/iSFM`
+5. **Virtual Environment**: `hybrid_sfm_env`
+6. **Next Objective**: Multi-format image loader with pyramid generation and GPU ops
 
 **Key Files to Mention**:
-- We will be adding logic to `src/core/types/camera.h`
-- Creating `src/core/types/camera.cpp`
-- Adding functions to `python/bindings.cpp`
 
-**This document should be updated daily with progress and shared with each new Claude chat for continuity.**
+**Already Created (Days 1-2):**
+
+- `CMakeLists.txt` - Main build configuration
+- `src/core/types/camera.h/cpp` - Camera models with distortion
+- `src/core/types/image.h/cpp` - Basic image class (needs enhancement)
+- `src/core/types/common.h` - Common type definitions
+- `src/core/utils/colmap_io.h/cpp` - COLMAP file I/O
+- `bindings/types_binding.cpp` - Python bindings
+- `tests/cpp/test_camera.cpp` - C++ camera tests
+- `tests/python/test_camera.py` - Python camera tests
+
+**To Be Enhanced/Created (Day 3):**
+
+- `src/core/types/image.h/cpp` - Add pyramid generation, GPU operations
+- `src/core/utils/image_io.h/cpp` - Multi-format image loading
+- `src/core/cuda/image_ops.cu` - CUDA kernels for image operations
+- `tests/cpp/test_image.cpp` - Image processing tests
+- `tests/python/test_image.py` - Python image tests
+
+**Key Achievements So Far**:
+
+- Solid C++/Python foundation
+- Complete camera system with distortion
+- Ready for image processing pipeline
 
 ---
 
-## 📝 Notes Section
+## 📝 Day-by-Day Progress Notes:
 
-**Day-by-day progress notes:**
-- **Day 1: Project Structure & Build System**: After an epic debugging session, we established a rock-solid manual build workflow that bypasses the inconsistencies of the `pip` build backend.
-  - **Decision**: All C++ dependencies (OpenCV+CUDA, Ceres, etc.) are built via `vcpkg install`.
-  - **Decision**: The C++ code is compiled manually using `cmake` and `ninja` from the **x64 Native Tools Command Prompt**. This gives us 100% control.
-  - **Decision**: Python installation is handled by `pip install .` *after* the C++ library has been manually compiled and copied into the Python source tree.
-  - **Technical Issue Solved**: Defeated the notorious Eigen memory alignment crash by using the NumPy -> Eigen automatic conversion bridge instead of exposing Eigen types directly as mutable classes. This is a robust and safe pattern.
+### Day 1: Project Structure & Build System ✅
+
+**Completed**: Successfully set up complete project structure on Ubuntu 22.04
+
+- Created CMakeLists.txt with all dependencies (OpenCV, Eigen, Ceres, pybind11)
+- Implemented basic C++ data types (Camera, CameraPose, Image)
+- Created working Python bindings with pybind11
+- Fixed Eigen alignment issues in CameraPose implementation
+- **Technical Decision**: Using standard Ubuntu package management instead of vcpkg
+- **Success**: Clean compilation and successful Python module import
+
+### Day 2: Camera Models & Calibration ✅
+
+**Completed**: Implemented comprehensive camera system
+
+- 10 different camera models (COLMAP compatible)
+- Full distortion support (radial, OpenCV, fisheye)
+- COLMAP I/O compatibility for seamless dataset integration
+- Robust projection/unprojection with sub-pixel accuracy
+- Complete unit tests (C++ with GTest, Python)
+- **Key Achievement**: 19.94 pixel distortion effect demonstrated
+- **Success**: All tests passing, ready for image pipeline
 
 - Day 2: [Add notes here]
