@@ -67,7 +67,7 @@ sudo apt install -y build-essential cmake git pkg-config libeigen3-dev libceres-
 ### 2\. Clone the Repository
 
 ```bash
-git clone [https://github.com/adnanamir010/iSFM.git](https://github.com/adnanamir010/iSFM.git)
+git clone https://github.com/adnanamir010/iSFM.git
 cd iSFM
 ```
 
@@ -170,4 +170,4 @@ This project is being developed over a 35-day schedule.
 
 ## 📜 License
 
-This project is licensed under the MIT License. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
