@@ -31,7 +31,22 @@ py::array mat_to_numpy(const cv::Mat& mat) {
         strides.push_back(mat.elemSize1());
     }
     
-    return py::array(py::dtype::of<uint8_t>(), shape, strides, mat.data);
+    // Create a numpy array that shares memory with the cv::Mat
+    // This is dangerous if the C++ object is destroyed.
+    // A safer approach is to copy the data.
+    // For read-only access, this is fine.
+    // Let's use a copy to be safe.
+    cv::Mat mat_copy = mat.clone();
+    return py::array(py::dtype::of<uint8_t>(), shape, strides, mat_copy.data, py::capsule(mat_copy.data, [](void* d) {
+        // The cv::Mat that owns the data will be destroyed when this capsule is,
+        // but we're creating a copy anyway. This is complex.
+        // A simpler, safer way is to just copy.
+    }));
+
+    // Let's try a simpler copy approach
+    py::array_t<uint8_t> arr(shape);
+    memcpy(arr.mutable_data(), mat.data, mat.total() * mat.elemSize());
+    return arr;
 }
 
 // Helper to convert numpy array to cv::Mat
@@ -127,6 +142,10 @@ void bind_image(py::module& m) {
         }, py::arg("camera"), py::arg("use_gpu") = true)
         .def("undistort", &Image::undistort,
              py::arg("camera"), py::arg("use_gpu") = true)
+        .def("resize", &Image::resize,
+             py::arg("width"), py::arg("height"), py::arg("use_gpu") = false)
+        .def("normalize", &Image::normalize,
+             py::arg("target_mean") = 128.0, py::arg("target_std") = 64.0, py::arg("use_gpu") = false)
         
         // Properties
         .def_property_readonly("width", &Image::getWidth)
@@ -277,20 +296,40 @@ void bind_image(py::module& m) {
     }, py::arg("image"), py::arg("target_mean") = 128.0, py::arg("target_std") = 64.0);
     
     m.def("batch_resize", [](py::list images, int max_dimension, bool use_gpu) {
-        // Note: This is a workaround - proper implementation would handle unique_ptr list
-        py::print("batch_resize: Not fully implemented for Python bindings");
-    }, py::arg("images"), py::arg("max_dimension"), py::arg("use_gpu") = true);
+        for (py::handle obj : images) {
+            auto& img = obj.cast<Image&>();
+            int max_dim = std::max(img.getWidth(), img.getHeight());
+            if (max_dim > max_dimension) {
+                double scale = static_cast<double>(max_dimension) / max_dim;
+                int new_width = static_cast<int>(img.getWidth() * scale);
+                int new_height = static_cast<int>(img.getHeight() * scale);
+                img.resize(new_width, new_height, use_gpu);
+            }
+        }
+    }, py::arg("images"), py::arg("max_dimension"), py::arg("use_gpu") = true,
+       py::doc("Resizes a list of images in-place."));
 
     m.def("batch_undistort", [](py::list images, const Camera& camera, bool use_gpu) {
-        // Note: This is a workaround - proper implementation would handle unique_ptr list
-        py::print("batch_undistort: Not fully implemented for Python bindings");
-    }, py::arg("images"), py::arg("camera"), py::arg("use_gpu") = true);
+        for (py::handle obj : images) {
+            auto& img = obj.cast<Image&>();
+            img.undistort(camera, use_gpu);
+        }
+    }, py::arg("images"), py::arg("camera"), py::arg("use_gpu") = true,
+       py::doc("Undistorts a list of images in-place."));
+    
+    m.def("batch_normalize", [](py::list images, double mean, double std, bool use_gpu) {
+        for (py::handle obj : images) {
+            auto& img = obj.cast<Image&>();
+            img.normalize(mean, std, use_gpu);
+        }
+    }, py::arg("images"), py::arg("mean"), py::arg("std"), py::arg("use_gpu") = false,
+       py::doc("Normalizes a list of images in-place."));
 
     m.def("format_memory_size", &image_utils::formatMemorySize);
+    
     m.def("optimize_memory_layout", [](py::list images) {
-        // Note: This is a workaround
-        py::print("optimize_memory_layout: Not fully implemented for Python bindings");
-    });
+        py::print("optimize_memory_layout: Not fully implemented in Python bindings yet.");
+    }, py::arg("images"), py::doc("Stub for optimizing memory layout of an image list."));
         
     // CUDA utilities
     m.def("has_cuda", []() {

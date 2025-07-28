@@ -1,4 +1,5 @@
 #include "core/types/image.h"
+#include "core/utils/image_io.h" // For normalizeImage
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/calib3d.hpp>
 #include <opencv2/imgproc.hpp>
@@ -412,6 +413,45 @@ cv::Mat Image::getResized(int width, int height, bool use_gpu) const {
     
     return resized;
 }
+
+void Image::resize(int width, int height, bool use_gpu) {
+    ensureLoaded();
+    cv::Mat resized_data = getResized(width, height, use_gpu);
+    
+    std::lock_guard<std::mutex> lock(load_mutex_);
+    data_ = resized_data;
+    
+    // Invalidate caches
+    if (gpu_memory_) {
+        gpu_memory_.reset();
+    }
+    undistorted_cache_.release();
+}
+
+void Image::normalize(double target_mean, double target_std, bool use_gpu) {
+    ensureLoaded();
+    
+    // Currently only CPU implementation is available in image_utils
+    if (use_gpu && cv::cuda::getCudaEnabledDeviceCount() > 0) {
+        // Placeholder for future GPU implementation
+        // For now, download, process on CPU, and re-upload if needed
+        if (isOnGPU()) {
+            downloadFromGPU();
+        }
+    }
+
+    cv::Mat normalized_data = image_utils::normalizeImage(data_, target_mean, target_std);
+    
+    std::lock_guard<std::mutex> lock(load_mutex_);
+    data_ = normalized_data;
+
+    // Invalidate caches
+    if (gpu_memory_) {
+        gpu_memory_.reset();
+    }
+    undistorted_cache_.release();
+}
+
 
 const cv::Mat& Image::getData() const {
     ensureLoaded();

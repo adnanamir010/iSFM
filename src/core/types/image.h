@@ -141,6 +141,10 @@ public:
     cv::Mat getGray(bool use_gpu = false) const;
     cv::Mat getResized(int width, int height, bool use_gpu = false) const;
     
+    // In-place operations
+    void resize(int width, int height, bool use_gpu = false);
+    void normalize(double target_mean = 128.0, double target_std = 64.0, bool use_gpu = false);
+
     // Getters
     const cv::Mat& getData() const;
     int getWidth() const;
