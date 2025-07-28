@@ -6,11 +6,15 @@
 #include "core/types/image.h"
 
 namespace py = pybind11;
-using namespace hybrid_sfm;
+
+namespace hybrid_sfm {
 
 void bind_types(py::module& m) {
-    // Camera Model enum - updated to match Day 2
-    py::enum_<Camera::Model>(m, "CameraModel")
+    // Camera class
+    py::class_<Camera> camera_class(m, "Camera");
+    
+    // Camera Model enum - bind as nested enum
+    py::enum_<Camera::Model>(camera_class, "Model")
         .value("SIMPLE_PINHOLE", Camera::Model::SIMPLE_PINHOLE)
         .value("PINHOLE", Camera::Model::PINHOLE)
         .value("SIMPLE_RADIAL", Camera::Model::SIMPLE_RADIAL)
@@ -22,8 +26,8 @@ void bind_types(py::module& m) {
         .value("RADIAL_FISHEYE", Camera::Model::RADIAL_FISHEYE)
         .value("THIN_PRISM_FISHEYE", Camera::Model::THIN_PRISM_FISHEYE);
     
-    // Camera class - updated methods
-    py::class_<Camera>(m, "Camera")
+    // Camera class methods
+    camera_class
         .def(py::init<>())
         .def(py::init<Camera::Model, int, int>())
         .def(py::init<Camera::Model, int, int, const std::vector<double>&>())
@@ -58,16 +62,8 @@ void bind_types(py::module& m) {
         .def("inverse", &CameraPose::inverse)
         .def("__mul__", &CameraPose::operator*);
     
-    // Image class
-    py::class_<Image>(m, "Image")
-        .def(py::init<>())
-        .def(py::init<const std::string&>())
-        .def("load", &Image::load)
-        .def("save", &Image::save)
-        .def("build_pyramid", &Image::buildPyramid)
-        .def("get_width", &Image::getWidth)
-        .def("get_height", &Image::getHeight)
-        .def("get_name", &Image::getName)
-        .def("get_path", &Image::getPath)
-        .def("get_id", &Image::getId);
+    // Also export enums at module level for backwards compatibility
+    m.attr("CameraModel") = camera_class.attr("Model");
 }
+
+} // namespace hybrid_sfm
